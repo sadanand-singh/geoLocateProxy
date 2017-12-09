@@ -1,0 +1,27 @@
+{
+    "here": {
+        "base_url": "https://geocoder.cit.api.here.com/6.2/geocode.json",
+        "address_query_name": "searchtext",
+        "coord_obj_keys": [
+            "Response",
+            "View",
+            0,
+            "Result",
+            0,
+            "Location",
+            "DisplayPosition",
+            ["Latitude", "Longitude"]
+        ]
+    },
+    "google": {
+        "base_url": "https://maps.googleapis.com/maps/api/geocode/json",
+        "address_query_name": "address",
+        "coord_obj_keys": [
+            "results",
+            0,
+            "geometry",
+            "location",
+            ["lat", "lng"]
+        ]
+    }
+}

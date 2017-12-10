@@ -11,6 +11,7 @@ from urllib.parse import urlencode
 from urllib.error import URLError
 import json
 
+
 class ExternalServiceProvider:
     """An ExternalServiceProvider is the third party geoCode provider.
 
@@ -42,7 +43,7 @@ class ExternalServiceProvider:
             address: address str for which coords are desired
 
         Returns:
-            code, coords: Response code and tuple of corrds
+            code, coords: Response code and list of coords
 
         """
 
@@ -83,7 +84,7 @@ class ExternalServiceProvider:
             raw_data: a file-like object from __get_raw_data method
 
         Returns:
-            code, coords: response code and tuple of corrds
+            code, coords: response code and list of corrds
 
         """
 
@@ -96,8 +97,8 @@ class ExternalServiceProvider:
                 try:
                     coords = coords[key]
                 except (IndexError, KeyError):
-                    return 400, None
+                    return 404, None
 
-        coords = (coords[0], coords[1])
+        coords = [coords[0], coords[1]]
 
         return raw_code, coords

@@ -1,8 +1,9 @@
 {
     "here": {
+        "primary": "false",
         "base_url": "https://geocoder.cit.api.here.com/6.2/geocode.json",
-        "address_query_name": "searchtext",
-        "coord_obj_keys": [
+        "query_address_string": "searchtext",
+        "coords_keys": [
             "Response",
             "View",
             0,
@@ -14,9 +15,10 @@
         ]
     },
     "google": {
+        "primary": "TRUE",
         "base_url": "https://maps.googleapis.com/maps/api/geocode/json",
-        "address_query_name": "address",
-        "coord_obj_keys": [
+        "query_address_string": "address",
+        "coords_keys": [
             "results",
             0,
             "geometry",

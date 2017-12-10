@@ -32,8 +32,8 @@ class ExternalServiceProvider:
 
         self.name = serviceData["name"]
         self.base_url = serviceData["base_url"]
-        self.query_address_string = serviceData["address_query_name"]
-        self.coords_keys = serviceData["coord_obj_keys"]
+        self.query_address_string = serviceData["query_address_string"]
+        self.coords_keys = serviceData["coords_keys"]
         self.api_key_params = serviceData["api_key_params"]
 
     def get_geocode(self, address):

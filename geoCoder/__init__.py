@@ -21,20 +21,21 @@ class GeoCoder:
     :py:class:`ExternalServiceProvider <geoCoder.externalServiceProvider>`.
     """
 
-    def __init__(self, primaryService):
+    def __init__(self, primary):
         """Geocoder Initializer
 
         Setups primary service definition and all other services based
         on user defined json files.
 
         Args:
-            primaryService: Name of the primary service provider
+            primary: Name of the primary service provider
 
         """
 
-        self.primaryService = primaryService
+        self.primary_service = primary
         self.services = []
-        self.setupServiceProviders()
+        self.num_services = 0
+        self.setup_service_providers()
 
 
     def setup_service_providers(self):

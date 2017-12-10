@@ -39,3 +39,14 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
         self.primary = primary
 
     def do_GET(self):
+        """ perform the GET call to the proxy server. """
+
+        status, coords = self.__geocoding()
+
+        if status >= 400:
+            self.__send_json(status, {'message': self.messages[status]})
+            return
+
+        self.__send_json(status, coords)
+        return
+

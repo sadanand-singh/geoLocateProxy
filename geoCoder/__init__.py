@@ -102,7 +102,7 @@ class GeoCoder:
             geocode_service = self.services[count]
             print("Using Service: {0}...".format(geocode_service.name))
             # send request to the service
-            status, coords = geocode_service.get_coordinates(address)
+            status, coords = geocode_service.get_geocode(address)
             count += 1
 
         return status, coords

@@ -36,7 +36,7 @@ class ExternalServiceProvider:
         self.coords_keys = serviceData["coord_obj_keys"]
         self.api_key_params = serviceData["api_key_params"]
 
-    def get_coordinates(self, address):
+    def get_geocode(self, address):
         """ get coords from provider
 
         Args:

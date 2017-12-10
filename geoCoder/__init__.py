@@ -54,8 +54,10 @@ class GeoCoder:
         # find Primary provider and curate a list of providers
         providers = self.__find_primary_provider(config)
 
-        secondary = [x for x in config.keys() if x != self.primary_service]
-        providers += secondary
+        # throw an error if less than 2 providers have been provided
+        if len(providers) < 2:
+            msg = "At least 2 external providers are needed!"
+            raise ValueError(msg)
 
         # load corresponding secrets from services.secrets.json
         secrets = {}

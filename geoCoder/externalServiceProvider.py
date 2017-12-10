@@ -49,8 +49,8 @@ class ExternalServiceProvider:
 
         try:
             raw_data = self.__get_raw_data(address)
-        except URLError:
-            return 404, None
+        except (URLError, ValueError):
+            return 503, None
         else:
             code, coords = self.__parse_raw_data(raw_data)
             return code, coords

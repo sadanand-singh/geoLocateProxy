@@ -15,6 +15,7 @@
 import subprocess
 from argparse import ArgumentParser
 from urllib.parse import quote
+from urllib.request import urlopen
 import sys
 import os
 
@@ -48,6 +49,10 @@ if __name__ == "__main__":
     except OSError as err:
         if err.errno == os.errno.ENOENT:
             print("curl not Found! Please install before running.")
+            print()
+            print("Will test using urllib.requests.urlopen()...")
+            fout = urlopen(queryString)
+            print(fout.read().decode('UTF-8', 'ignore'))
         else:
             raise
     except KeyboardInterrupt:

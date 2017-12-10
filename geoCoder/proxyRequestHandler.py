@@ -34,7 +34,8 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
             self.__send_json(status, {'message': self.messages[status]})
             return
 
-        self.__send_json(status, coords)
+        msg = {"Latitude": coords[0], "Longitude": coords[1]}
+        self.__send_json(status, msg)
         return
 
     def __geocoding(self):

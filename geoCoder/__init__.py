@@ -21,18 +21,18 @@ class GeoCoder:
     :py:class:`ExternalServiceProvider <geoCoder.externalServiceProvider>`.
     """
 
-    def __init__(self, primary):
+    def __init__(self):
         """Geocoder Initializer
 
         Setups primary service definition and all other services based
         on user defined json files.
 
         Args:
-            primary: Name of the primary service provider
+            None
 
         """
 
-        self.primary_service = primary
+        self.primary_service = ""
         self.services = []
         self.num_services = 0
         self.setup_service_providers()
@@ -51,13 +51,8 @@ class GeoCoder:
         with open("./services.json", "r") as cfile:
             config = json.loads(cfile.read())
 
-        # check if primaryService exists in this data
-        providers = []
-        if self.primary_service in config.keys():
-            providers.append(self.primary_service)
-        else:
-            msg = "Requested Primary Service {0} is not defined in the services.json file"
-            raise ValueError(msg.format(self.primary_service))
+        # find Primary provider and curate a list of providers
+        providers = self.__find_primary_provider(config)
 
         secondary = [x for x in config.keys() if x != self.primary_service]
         providers += secondary
@@ -82,6 +77,44 @@ class GeoCoder:
         # update total no. of services
         self.num_services = len(self.services)
 
+    def __find_primary_provider(self, config):
+        """ from the loaded json condif dict, find the primary provider.
+
+        The primary provider is chosen based on the following logic:
+
+        A. If a unique provider has "primary" key defined as "true" in
+        the "services.json" file, it is promoted as "Primary" provider.
+
+        B. If multiple providers have "primary" key defined as "true",
+        randomly one of them is promoted as "Primary" provider.
+
+        C. If none of the providers have "primary" key defined as
+        "true", randomly one among all is promoted as "Primary"
+        provider.
+
+        Args:
+            config: dict data from services.json
+
+        Returns:
+            providers: list of providers, first being primary
+
+        """
+
+        primary_providers = []
+        providers = list(config.keys())
+
+        for serv in providers:
+            if "primary" in config[serv].keys():
+                if config[serv]['primary'].lower() == "true":
+                    primary_providers.append(serv)
+
+        self.primary_service = providers[0]
+        if primary_providers:
+            self.primary_service = primary_providers[0]
+            providers.remove(self.primary_service)
+            providers = [self.primary_service] + providers
+
+        return providers
 
     def get_geocode(self, address):
         """ get cords from external service for a given address.

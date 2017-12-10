@@ -93,7 +93,7 @@ curl "http://localhost:9099/?address=San%20Francisco%2C%20CA"
 
 2. You can paste `http://localhost:9099/?address=San%20Francisco%2C%20CA` in  your browser.
 
-3. You can use the provided helper script `testProxy.py`. This script first tries to use `curl` to make a query. If curl is not found, it uses the `urllib.request.urlopen()` method from the standard python library to make a query. It takes "address" as a positional argument and optionally lets you chose the server address and port, using the `--server` and `--port` options, same as the `runProxy.py` script.
+3. You can use the provided helper script `testProxy.py`. This script first tries to use `curl` to make a query. If curl is not found, it uses the [`urllib.request.urlopen()`](https://docs.python.org/3/library/urllib.request.html) method from the standard python library to make a query. It takes "address" as a positional argument and optionally lets you chose the server address and port, using the `--server` and `--port` options, same as the `runProxy.py` script.
 
 ```bash
 ./testProxy.py --help

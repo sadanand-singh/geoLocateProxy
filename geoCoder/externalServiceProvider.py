@@ -84,12 +84,12 @@ class ExternalServiceProvider:
             raw_data: a file-like object from __get_raw_data method
 
         Returns:
-            code, coords: response code and list of corrds
+            code, coords: response code and list of coords
 
         """
 
         encoding = raw_data.info().get_content_charset("utf-8")
-        raw_code = raw_data.getcode()
+        status = raw_data.getcode()
         coord_data = raw_data.read()
         coords = json.loads(coord_data.decode(encoding))
 
@@ -103,4 +103,4 @@ class ExternalServiceProvider:
 
         coords = [coords[key[0]], coords[key[1]]]
 
-        return raw_code, coords
+        return status, coords

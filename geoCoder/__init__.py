@@ -6,6 +6,10 @@
 
 """
 
+import json
+from geoCoder.externalServiceProvider import ExternalServiceProvider
+
+
 class GeoCoder:
     """A GeoCoder is the agent to query set of external service providers.
 
@@ -33,18 +37,49 @@ class GeoCoder:
         self.setupServiceProviders()
 
 
-    def setupServiceProviders(self):
-        """Create all instances of external service providers based on user defined services.json file """
+    def setup_service_providers(self):
+        """Create all instances of external service providers based on user defined services.json
+
+        Args:
+            None
+
+        """
 
         # Read the services.json file to get all providers
+        config = {}
+        with open("./services.json", "r") as cfile:
+            config = json.loads(cfile.read())
 
         # check if primaryService exists in this data
+        providers = []
+        if self.primary_service in config.keys():
+            providers.append(self.primary_service)
+        else:
+            msg = "Requested Primary Service {0} is not defined in the services.json file"
+            raise ValueError(msg.format(self.primary_service))
+
+        secondary = [x for x in config.keys() if x != self.primary_service]
+        providers += secondary
 
         # load corresponding secrets from services.secrets.json
+        secrets = {}
+        with open("./services.secrets.json", "r") as sfile:
+            secrets = json.loads(sfile.read())
+            missing = list(set(providers) - set(list(secrets.keys())))
+            if missing:
+                msg = "Secrets not provided for services: {0}!"
+                raise ValueError(msg.format(missing))
 
         # create ExternalServiceProvider objects
-        return
+        for serv in providers:
+            service_config = config[serv]
+            service_config["name"] = serv
+            sconf = secrets[serv]
+            service_config["api_key_params"] = sconf["api_key_params"]
+            self.services.append(ExternalServiceProvider(service_config))
 
+        # update total no. of services
+        self.num_services = len(self.services)
 
     def getGeoCode(self, address):
         """ get cords from external service for a given address"""

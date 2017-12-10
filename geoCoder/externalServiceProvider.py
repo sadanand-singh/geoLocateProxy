@@ -92,6 +92,8 @@ class ExternalServiceProvider:
         raw_code = raw_data.getcode()
         coord_data = raw_data.read()
         coords = json.loads(coord_data.decode(encoding))
+
+        key = None
         for key in self.coords_keys:
             if not isinstance(key, list):
                 try:
@@ -99,6 +101,6 @@ class ExternalServiceProvider:
                 except (IndexError, KeyError):
                     return 404, None
 
-        coords = [coords[0], coords[1]]
+        coords = [coords[key[0]], coords[key[1]]]
 
         return raw_code, coords

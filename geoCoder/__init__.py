@@ -82,7 +82,27 @@ class GeoCoder:
         # update total no. of services
         self.num_services = len(self.services)
 
-    def getGeoCode(self, address):
-        """ get cords from external service for a given address"""
 
-        return results
+    def get_geocode(self, address):
+        """ get cords from external service for a given address.
+
+        Args:
+            address: address str for which coords are desired
+
+        Returns:
+            code, coords: Response code and list of coords
+
+        """
+
+        # Keep trying until Response is received
+        count = 0
+        status = 503
+        coords = None
+        while status >= 400 and count < self.num_services:
+            geocode_service = self.services[count]
+            print("Using Service: {0}...".format(geocode_service.name))
+            # send request to the service
+            status, coords = geocode_service.get_coordinates(address)
+            count += 1
+
+        return status, coords

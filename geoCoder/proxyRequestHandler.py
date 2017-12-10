@@ -26,4 +26,16 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
     messages[404] = 'Adrress did not found on any providers!'
 
 
+    def __init__(self, primary):
+        """ Initializer with additional param for primary provider.
+
+        Args:
+            primary: name of the primary service provider
+
+        """
+
+        super().__init__()
+        # add name of the primary provider
+        self.primary = primary
+
     def do_GET(self):

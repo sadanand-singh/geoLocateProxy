@@ -20,10 +20,10 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
     external service providers.
     """
 
-    messages = {}
-    messages[400] = 'Please provide an address to geocode your request query string (e.g. "?address=PostMates Office, CA")'
-    messages[503] = 'There are no geocoding services available. Try again later.'
-    messages[404] = 'Adrress did not found on any providers!'
+    msgs = {}
+    msgs[400] = 'Please provide an address to geocode your request query string (e.g. "?address=PostMates Office, CA")'
+    msgs[503] = 'There are no geocoding services available. Try again later.'
+    msgs[404] = 'Adrress did not found on any providers!'
 
     def do_GET(self):
         """ perform the GET call to the proxy server. """
@@ -31,7 +31,11 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
         status, coords = self.__geocoding()
 
         if status >= 400:
-            self.__send_json(status, {'message': self.messages[status]})
+            if status in [400, 404, 503]:
+                self.__send_json(status, {'message': self.msgs[status]})
+            else:
+                msg = "Can not process this request. Status: {0}"
+                self.__send_json(status, {'message': msg.format(status)})
             return
 
         msg = {"Latitude": coords[0], "Longitude": coords[1]}

@@ -32,6 +32,40 @@ class LimitedSizeDict(OrderedDict):
                 self.popitem(last=False)
 
 
+class memoize(object):
+    """cache the return value of a method
+
+    This class is meant to be used as a decorator of methods. The
+    return value
+    from a given method invocation will be cached on the instance
+    whose method was invoked.All arguments passed to a method
+    decorated with memoize must be hashable.
+
+    """
+
+    def __init__(self, func):
+        self.func = func
+
+    def __get__(self, obj, objtype=None):
+        if obj is None:
+            return self.func
+        return partial(self, obj)
+
+    def __call__(self, *args, **kw):
+        obj = args[0]
+        try:
+            cache = obj.cache
+        except AttributeError:
+            cache = obj.cache = LimitedSizeDict(size_limit=100)
+
+        key = args[1]
+        try:
+            res = cache[key]
+        except KeyError:
+            res = cache[key] = self.func(*args, **kw)
+
+        status, coords = res
+        return status, coords
 
 class ProxyRequestHandler(BaseHTTPRequestHandler):
     """HTTP Request handler component for the proxy server.

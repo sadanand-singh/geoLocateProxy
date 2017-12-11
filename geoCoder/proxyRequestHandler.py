@@ -62,7 +62,9 @@ class memoize(object):
         try:
             res = cache[key]
         except KeyError:
-            res = cache[key] = self.func(*args, **kw)
+            res = self.func(*args, **kw)
+            if res[0] == 200:
+                cache[key] = res
 
         status, coords = res
         return status, coords

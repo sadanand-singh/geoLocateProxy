@@ -80,6 +80,9 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
     msgs[503] = 'There are no geocoding services available. Try again later.'
     msgs[404] = 'Adrress did not found on any providers!'
 
+    cache = LimitedSizeDict(size_limit=100)
+    geoCoder = None
+
     def do_GET(self):
         """ perform the GET call to the proxy server. """
 
@@ -108,7 +111,7 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
 
         """
 
-        geocoder = GeoCoder()
+        self.geocoder = GeoCoder()
         uri = urlparse(self.path)
         query = parse_qs(uri.query)
         status = 400
@@ -116,9 +119,13 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
         if query.get('address') is None:
             return status, None
 
-        status, coords = geocoder.get_geocode(query['address'][0])
+        status, coords = self.__get_coords(query['address'][0])
 
         return status, coords
+
+    @memoize
+    def __get_coords(self, address):
+        return self.geocoder.get_geocode(address)
 
     def __send_json(self, http_status_code, data):
         """Helper method to send json data to server

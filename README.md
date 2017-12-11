@@ -1,6 +1,6 @@
 # Geocoding Proxy Service
 
-This is a simple proxy service that can resolve latitude and logitude for a given address using third party geocoding services like [Google](https://developers.google.com/maps/documentation/geocoding/start) and [Here](https://developer.here.com/documentation/geocoder/topics/quick-start.html). Additional services can be added in the services.json file, as per the template of existing services. One of these services can also be declared as primary service provider. For each of the services, the API credentials and secrets need to be provided via the services.secrets.json file. 
+This is a simple proxy service that can resolve latitude and longitude for a given address using third party geocoding services like [Google](https://developers.google.com/maps/documentation/geocoding/start) and [Here](https://developer.here.com/documentation/geocoder/topics/quick-start.html). Additional services can be added in the services.json file, as per the template of existing services. One of these services can also be declared as primary service provider. For each of the services, the API credentials and secrets need to be provided via the services.secrets.json file. 
 
 The API follows a RESTful HTTP Interface and uses JSON for data serialization.
 
@@ -11,27 +11,28 @@ The API follows a RESTful HTTP Interface and uses JSON for data serialization.
 
 ## Setup
 
-1. copy services.secrets.json.sample to services.secrets.json
-2. Save credentials for geocoding services
-    a. **Here**
+1. Clone this [repository](https://github.com/sadanand-singh/geoLocateProxy) or download as an archive.
+2. copy services.secrets.json.sample to services.secrets.json
+3. Save credentials for geocoding services
+    - **Here**
         - Sign up for an account at https://developer.here.com/authenticationpage
         - Navigate to https://developer.here.com/projects and create a project.
         - On the project page, copy the provided app ID and app Key.
         - Save them into the JSON field `here.api_key_params.app_id` and `here.api_key_params.app_key`, in services.secrets.json.
-    b. **Google**
+    - **Google**
         - Navigate to https://developers.google.com/maps/documentation/geocoding/get-api-key
         - Click "Get a Key" and follow the instructions.
         - Copy the provided API Key.
         - Save it into the JSON field `google.api_key_params.key` in services.secrets.json.
-3. OPTIONALLY, add any other third party providers in the services.json file, along with their corresponding credentials/secrets in the services.secrets.json file.
+4. OPTIONALLY, add any other third party providers in the services.json file, along with their corresponding credentials/secrets in the services.secrets.json file.
 
 **NOTES** for `services.json` file:
 
 1. Every entry in services.json should have corresponding secrets/credentials entry in the services.secrets.json file.
 2. Every entry should provide following _compulsory_ fields:
-    a. `base_url`: The URL that is used to make the query service. For example, for google, this would be `https://maps.googleapis.com/maps/api/geocode/json`
-    b. `query_address_string`: The query string that is used in the complete http request to service. For eg. for google, the query string is `https://maps.googleapis.com/maps/api/geocode/json/?address=San%20Francisco%2C%20CA&key=YOUR_API_KEY'`, hence this string would be `address`.
-    c. `coords_keys`: An ordered sequence of keys and indices from returned json, that could be used to extract `Latitude` and `Longitude` of the address. For example, based on Response example from Here, as outlined [here](https://developer.here.com/documentation/geocoder/topics/quick-start-geocode.html), following sequence of keys can be used for:
+    - `base_url`: The URL that is used to make the query service. For example, for google, this would be `https://maps.googleapis.com/maps/api/geocode/json`
+    - `query_address_string`: The query string that is used in the complete http request to service. For eg. for google, the query string is `https://maps.googleapis.com/maps/api/geocode/json/?address=San%20Francisco%2C%20CA&key=YOUR_API_KEY'`, hence this string would be `address`.
+    - `coords_keys`: An ordered sequence of keys and indices from returned json, that could be used to extract `Latitude` and `Longitude` of the address. For example, based on Response example from Here, as outlined [here](https://developer.here.com/documentation/geocoder/topics/quick-start-geocode.html), following sequence of keys can be used for:
     ```
     [
         "Response",
@@ -77,7 +78,9 @@ Server is running at http://localhost:9099
 
 The service can be graciously killed by sending SIGINT via the CNTRL+C (^C) key stroke. 
 
-## Testing the API
+## Testing/Using the API
+
+First start the Proxy Server.
 
 Since the API provides a RESTful HTTP Interface, it can be used by different web clients.
 
@@ -123,9 +126,9 @@ Running...
 ```
 
 
-## Tests
+## Unit Tests
 
-The tests can be run as follows:
+The unit tests for this codebase can be run as follows:
 
 ```bash
 python3 -m unittest
